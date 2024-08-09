@@ -1,47 +1,60 @@
 package com.example.calculadora
 
 import android.os.Bundle
-import androidx.activity.ComponentActivity
-import androidx.activity.compose.setContent
-import androidx.activity.enableEdgeToEdge
-import androidx.compose.foundation.layout.fillMaxSize
-import androidx.compose.foundation.layout.padding
-import androidx.compose.material3.Scaffold
-import androidx.compose.material3.Text
-import androidx.compose.runtime.Composable
-import androidx.compose.ui.Modifier
-import androidx.compose.ui.tooling.preview.Preview
-import com.example.calculadora.ui.theme.CalculadoraTheme
+import android.view.View
+import android.widget.Button
+import android.widget.EditText
+import androidx.appcompat.app.AppCompatActivity
 
-class MainActivity : ComponentActivity() {
+class MainActivity : AppCompatActivity() {
+
+    private lateinit var display: EditText
+    private var currentInput: String = ""
+
     override fun onCreate(savedInstanceState: Bundle?) {
         super.onCreate(savedInstanceState)
-        enableEdgeToEdge()
-        setContent {
-            CalculadoraTheme {
-                Scaffold(modifier = Modifier.fillMaxSize()) { innerPadding ->
-                    Greeting(
-                        name = "Android",
-                        modifier = Modifier.padding(innerPadding)
-                    )
-                }
-            }
+        setContentView(R.layout.activity_main)
+
+        display = findViewById(R.id.display)
+
+        setButtonListeners()
+    }
+
+    private fun setButtonListeners() {
+        val buttonIds = listOf(
+            R.id.btn1, R.id.btn2, R.id.btn3,
+            //...
+        )
+
+        for (id in buttonIds) {
+            val button = findViewById<Button>(id)
+            button.setOnClickListener { v -> onButtonClick((v as Button).text.toString()) }
         }
     }
-}
 
-@Composable
-fun Greeting(name: String, modifier: Modifier = Modifier) {
-    Text(
-        text = "Hello $name!",
-        modifier = modifier
-    )
-}
+    private fun onButtonClick(text: String) {
+        currentInput += text
+        display.setText(currentInput)
+    }
 
-@Preview(showBackground = true)
-@Composable
-fun GreetingPreview() {
-    CalculadoraTheme {
-        Greeting("Android")
+    private fun suma(n1: Int, n2: Int): Int {
+        return n1 + n2
+    }
+
+    private fun resta(n1: Int, n2: Int): Int {
+        return n1 - n2
+    }
+
+    private fun multiplicacion(n1: Int, n2: Int): Int {
+        return n1 * n2
+    }
+
+    private fun division(n1: Int, n2: Int): Int {
+        return if (n2 != 0) {
+            n1 / n2
+        } else {
+
+            0
+        }
     }
 }
